@@ -19,10 +19,10 @@ class HomeViewModel @Inject constructor(
     private val _state = MutableStateFlow(UiState())
     val state: StateFlow<UiState> = _state.asStateFlow()
 
-    fun onUiReady(region: String) {
+    fun onUiReady() {
         viewModelScope.launch {
             _state.value = UiState(loading = true)
-            _state.value = UiState(loading = false, movies = repository.fetchPopularMovies(region))
+            _state.value = UiState(loading = false, movies = repository.fetchPopularMovies())
         }
     }
 

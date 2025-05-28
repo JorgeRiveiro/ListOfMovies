@@ -2,10 +2,12 @@ package com.jriveiro.listofmovies.data
 
 import javax.inject.Inject
 
-class MoviesRepository @Inject constructor() {
+class MoviesRepository @Inject constructor(
+    private val regionRepository: RegionRepository
+) {
 
-    suspend fun fetchPopularMovies(region: String): List<Movie> =
-        MoviesClient.instance.fetchPopularMovies(region)
+    suspend fun fetchPopularMovies(): List<Movie> =
+        MoviesClient.instance.fetchPopularMovies(regionRepository.findLastRegion())
             .results
             .map { it.toDomainModel() }
 

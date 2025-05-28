@@ -1,5 +1,6 @@
 package com.jriveiro.listofmovies.ui.screens.home
 
+import android.Manifest
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -30,6 +31,7 @@ import coil.compose.AsyncImage
 import com.jriveiro.listofmovies.R
 import com.jriveiro.listofmovies.data.Movie
 import com.jriveiro.listofmovies.ui.common.LoadingIndicator
+import com.jriveiro.listofmovies.ui.common.PermissionRequestEffect
 import com.jriveiro.listofmovies.ui.screens.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -39,7 +41,9 @@ fun HomeScreen(
     vm: HomeViewModel = hiltViewModel()
 ) {
     val homeState = rememberHomeState()
-    homeState.AskRegionEffect { vm.onUiReady(it) }
+    PermissionRequestEffect(permission = Manifest.permission.ACCESS_COARSE_LOCATION) {
+        vm.onUiReady()
+    }
 
     Screen {
 
