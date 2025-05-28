@@ -1,41 +1,10 @@
 package com.jriveiro.listofmovies.data
 
-import android.annotation.SuppressLint
-import android.app.Application
-import android.location.Geocoder
-import android.location.Location
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
-import com.jriveiro.listofmovies.ui.common.getFromLocationCompat
-import kotlinx.coroutines.suspendCancellableCoroutine
+import com.jriveiro.listofmovies.data.datasources.RegionDataSource
 import javax.inject.Inject
-import kotlin.coroutines.resume
-
-const val DEFAULT_REGION = "ES"
 
 class RegionRepository @Inject constructor(
-    app: Application
+    private val regionDataSource: RegionDataSource
 ) {
-    private val fusedLocationClient = LocationServices.getFusedLocationProviderClient(app)
-    private val geocoder = Geocoder(app)
-
-    suspend fun findLastRegion(): String =
-        fusedLocationClient.lastLocation()?.toRegion() ?: DEFAULT_REGION
-
-    @SuppressLint("MissingPermission")
-    private suspend fun FusedLocationProviderClient.lastLocation(): Location? {
-        return suspendCancellableCoroutine { continuation ->
-            lastLocation.addOnSuccessListener { location ->
-                continuation.resume(location)
-            }.addOnFailureListener {
-                continuation.resume(null)
-            }
-        }
-    }
-
-    private suspend fun Location.toRegion(): String {
-        val addresses = geocoder.getFromLocationCompat(latitude, longitude, 1)
-        val region = addresses.firstOrNull()?.countryCode
-        return region ?: DEFAULT_REGION
-    }
+    suspend fun findLastRegion(): String = regionDataSource.findLastRegion()
 }

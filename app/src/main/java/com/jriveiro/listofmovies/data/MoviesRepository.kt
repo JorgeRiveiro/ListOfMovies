@@ -1,29 +1,15 @@
 package com.jriveiro.listofmovies.data
 
+import com.jriveiro.listofmovies.data.datasources.MoviesRemoteDataSource
 import javax.inject.Inject
 
 class MoviesRepository @Inject constructor(
-    private val regionRepository: RegionRepository
+    private val regionRepository: RegionRepository,
+    private val remoteDataSource: MoviesRemoteDataSource
 ) {
 
-    suspend fun fetchPopularMovies(): List<Movie> =
-        MoviesClient.instance.fetchPopularMovies(regionRepository.findLastRegion())
-            .results
-            .map { it.toDomainModel() }
+    suspend fun fetchPopularMovies(): List<Movie> = remoteDataSource.fetchPopularMovies(regionRepository.findLastRegion())
 
-    suspend fun findMovieById(id: Int): Movie =
-        MoviesClient.instance.fetchMovieById(id).toDomainModel()
+    suspend fun findMovieById(id: Int): Movie = remoteDataSource.findMovieById(id)
+
 }
-
-private fun RemoteMovie.toDomainModel() = Movie(
-    id,
-    title,
-    overview,
-    releaseDate,
-    "https://image.tmdb.org/t/p/w185/$posterPath",
-    backdropPath?.let { "https://image.tmdb.org/t/p/w780/$it" },
-    originalLanguage,
-    originalTitle,
-    popularity,
-    voteAverage
-)
