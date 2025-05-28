@@ -40,6 +40,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.jriveiro.listofmovies.R
 import com.jriveiro.listofmovies.data.Movie
+import com.jriveiro.listofmovies.ui.common.AcScaffold
 import com.jriveiro.listofmovies.ui.common.LoadingIndicator
 import com.jriveiro.listofmovies.ui.screens.Screen
 
@@ -47,21 +48,22 @@ import com.jriveiro.listofmovies.ui.screens.Screen
 @Composable
 fun DetailScreen(vm: DetailViewModel = hiltViewModel(), onBack: () -> Unit) {
 
-    val detailState = rememberDetailState()
     val state by vm.state.collectAsState()
+    val detailState = rememberDetailState(state)
 
     Screen {
-        Scaffold(
+        AcScaffold(
+            state = state,
             topBar = {
                 DetailTopBar(
-                    title = state.movie?.title ?: "",
+                    title = detailState.topBarTitle,
                     scrollBehavior = detailState.scrollBehavior,
                     onBack = onBack
                 )
             },
             floatingActionButton = {
                 FloatingActionButton(onClick = { vm.onFavoriteClicked() }) {
-                    val favorite = state.movie?.isFavorite ?: false
+                    val favorite = detailState.movie?.isFavorite ?: false
                     Icon(
                         imageVector = if (favorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
                         contentDescription = stringResource(id = R.string.favorite)
@@ -70,21 +72,15 @@ fun DetailScreen(vm: DetailViewModel = hiltViewModel(), onBack: () -> Unit) {
             },
             snackbarHost = { SnackbarHost(hostState = detailState.snackbarHostState) },
             modifier = Modifier.nestedScroll(detailState.scrollBehavior.nestedScrollConnection)
-        ) { padding ->
-
-            if (state.loading) {
-                LoadingIndicator(modifier = Modifier.padding(padding))
-            }
-
-            state.movie?.let {
-                MovieDetail(
-                    movie = it,
-                    modifier = Modifier.padding(padding)
-                )
-            }
+        ) { padding, movie ->
+            MovieDetail(
+                movie = movie,
+                modifier = Modifier.padding(padding)
+            )
         }
     }
 }
+
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
@@ -141,7 +137,11 @@ private fun MovieDetail(
 }
 
 @Composable
-private fun AnnotatedString.Builder.Property(name: String, value: String, end: Boolean = false) {
+private fun AnnotatedString.Builder.Property(
+    name: String,
+    value: String,
+    end: Boolean = false
+) {
     withStyle(ParagraphStyle(lineHeight = 18.sp)) {
         withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
             append("$name: ")

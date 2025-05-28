@@ -3,15 +3,13 @@ package com.jriveiro.listofmovies.ui.screens.details
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
+import com.jriveiro.listofmovies.ui.Result
 import com.jriveiro.listofmovies.data.Movie
 import com.jriveiro.listofmovies.data.MoviesRepository
-import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
+import com.jriveiro.listofmovies.ui.ifSuccess
+import com.jriveiro.listofmovies.ui.stateAsResultIn
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -24,22 +22,11 @@ class DetailViewModel@Inject constructor(
     private val id: Int = savedStateHandle["id"]
         ?: throw IllegalArgumentException("User ID not found in saved state")
 
-    private val message = MutableStateFlow<String?>(null)
-    val state: StateFlow<UiState> = repository.findMovieById(id)
-        .map { UiState(movie = it) }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = UiState(loading = true)
-        )
-
-    data class UiState(
-        val loading: Boolean = false,
-        val movie: Movie? = null
-    )
+    val state: StateFlow<Result<Movie>> = repository.findMovieById(id)
+        .stateAsResultIn(scope = viewModelScope)
 
     fun onFavoriteClicked() {
-        state.value.movie?.let {
+        state.value.ifSuccess {
             viewModelScope.launch {
                 repository.toggleFavorite(it)
             }
