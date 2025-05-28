@@ -10,12 +10,14 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class DetailViewModel@Inject constructor(
-    repository: MoviesRepository,
+    private val repository: MoviesRepository,
     savedStateHandle: SavedStateHandle
 ): ViewModel() {
 
@@ -23,14 +25,9 @@ class DetailViewModel@Inject constructor(
         ?: throw IllegalArgumentException("User ID not found in saved state")
 
     private val message = MutableStateFlow<String?>(null)
-    val state: StateFlow<UiState> =
-        combine(repository.findMovieById(id), message) { movie, message ->
-            UiState(
-                loading = false,
-                movie = movie,
-                message = message
-            )
-        }.stateIn(
+    val state: StateFlow<UiState> = repository.findMovieById(id)
+        .map { UiState(movie = it) }
+        .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
             initialValue = UiState(loading = true)
@@ -38,15 +35,14 @@ class DetailViewModel@Inject constructor(
 
     data class UiState(
         val loading: Boolean = false,
-        val movie: Movie? = null,
-        val message: String? = null
+        val movie: Movie? = null
     )
 
     fun onFavoriteClicked() {
-        message.value = null
-    }
-
-    fun onMessageShown() {
-        message.value = null
+        state.value.movie?.let {
+            viewModelScope.launch {
+                repository.toggleFavorite(it)
+            }
+        }
     }
 }
