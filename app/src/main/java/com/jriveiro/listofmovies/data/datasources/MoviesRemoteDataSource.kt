@@ -1,8 +1,8 @@
 package com.jriveiro.listofmovies.data.datasources
 
 import com.jriveiro.listofmovies.data.Movie
-import com.jriveiro.listofmovies.data.MoviesClient
-import com.jriveiro.listofmovies.data.RemoteMovie
+import com.jriveiro.listofmovies.data.datasources.remote.MoviesClient
+import com.jriveiro.listofmovies.data.datasources.remote.RemoteMovie
 import javax.inject.Inject
 
 class MoviesRemoteDataSource @Inject constructor() {

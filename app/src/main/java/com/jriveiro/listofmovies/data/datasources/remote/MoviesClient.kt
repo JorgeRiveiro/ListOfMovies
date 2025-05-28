@@ -1,4 +1,4 @@
-package com.jriveiro.listofmovies.data
+package com.jriveiro.listofmovies.data.datasources.remote
 
 import com.jriveiro.listofmovies.BuildConfig
 import kotlinx.serialization.json.Json

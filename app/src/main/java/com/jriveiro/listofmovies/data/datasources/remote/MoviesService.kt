@@ -1,4 +1,4 @@
-package com.jriveiro.listofmovies.data
+package com.jriveiro.listofmovies.data.datasources.remote
 
 import retrofit2.http.GET
 import retrofit2.http.Path

@@ -7,23 +7,34 @@ import com.jriveiro.listofmovies.data.Movie
 import com.jriveiro.listofmovies.data.MoviesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
 class DetailViewModel@Inject constructor(
-    private val repository: MoviesRepository,
+    repository: MoviesRepository,
     savedStateHandle: SavedStateHandle
 ): ViewModel() {
 
     private val id: Int = savedStateHandle["id"]
         ?: throw IllegalArgumentException("User ID not found in saved state")
 
-    private val _state = MutableStateFlow(UiState())
-    val state: StateFlow<UiState> = _state.asStateFlow()
+    private val message = MutableStateFlow<String?>(null)
+    val state: StateFlow<UiState> =
+        combine(repository.findMovieById(id), message) { movie, message ->
+            UiState(
+                loading = false,
+                movie = movie,
+                message = message
+            )
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = UiState(loading = true)
+        )
 
     data class UiState(
         val loading: Boolean = false,
@@ -31,18 +42,11 @@ class DetailViewModel@Inject constructor(
         val message: String? = null
     )
 
-    init {
-        viewModelScope.launch {
-            _state.value = UiState(loading = true)
-            _state.value = UiState(loading = false, movie = repository.findMovieById(id))
-        }
-    }
-
     fun onFavoriteClicked() {
-        _state.update { it.copy(message = "Favorite clicked") }
+        message.value = null
     }
 
     fun onMessageShown() {
-        _state.update { it.copy(message = null) }
+        message.value = null
     }
 }
