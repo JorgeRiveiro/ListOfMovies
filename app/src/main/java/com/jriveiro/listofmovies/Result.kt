@@ -1,4 +1,4 @@
-package com.jriveiro.listofmovies.ui
+package com.jriveiro.listofmovies
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
