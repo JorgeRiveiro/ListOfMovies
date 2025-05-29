@@ -16,7 +16,6 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -39,9 +38,8 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.jriveiro.listofmovies.R
-import com.jriveiro.listofmovies.data.Movie
+import com.jriveiro.listofmovies.domain.Movie
 import com.jriveiro.listofmovies.ui.common.AcScaffold
-import com.jriveiro.listofmovies.ui.common.LoadingIndicator
 import com.jriveiro.listofmovies.ui.screens.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)

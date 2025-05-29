@@ -1,11 +1,7 @@
-package com.jriveiro.listofmovies.data
+package com.jriveiro.listofmovies.domain
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-
-@Entity
 data class Movie(
-    @PrimaryKey(autoGenerate = true) val id: Int,
+    val id: Int,
     val title: String,
     val overview: String,
     val releaseDate: String,

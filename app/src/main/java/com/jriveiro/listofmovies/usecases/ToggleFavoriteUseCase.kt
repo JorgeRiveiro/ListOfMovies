@@ -1,6 +1,6 @@
 package com.jriveiro.listofmovies.usecases
 
-import com.jriveiro.listofmovies.data.Movie
+import com.jriveiro.listofmovies.domain.Movie
 import com.jriveiro.listofmovies.data.MoviesRepository
 import javax.inject.Inject
 

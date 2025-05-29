@@ -5,8 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import com.jriveiro.listofmovies.Result
-import com.jriveiro.listofmovies.data.Movie
-import com.jriveiro.listofmovies.data.MoviesRepository
+import com.jriveiro.listofmovies.domain.Movie
 import com.jriveiro.listofmovies.ifSuccess
 import com.jriveiro.listofmovies.stateAsResultIn
 import com.jriveiro.listofmovies.usecases.FindMovieByIdUseCase

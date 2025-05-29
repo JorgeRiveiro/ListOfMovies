@@ -14,7 +14,6 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -29,9 +28,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.jriveiro.listofmovies.R
-import com.jriveiro.listofmovies.data.Movie
+import com.jriveiro.listofmovies.domain.Movie
 import com.jriveiro.listofmovies.ui.common.AcScaffold
-import com.jriveiro.listofmovies.ui.common.LoadingIndicator
 import com.jriveiro.listofmovies.ui.common.PermissionRequestEffect
 import com.jriveiro.listofmovies.ui.screens.Screen
 

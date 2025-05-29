@@ -2,10 +2,10 @@ package com.jriveiro.listofmovies.data
 
 import com.jriveiro.listofmovies.data.datasources.MoviesLocalDataSource
 import com.jriveiro.listofmovies.data.datasources.MoviesRemoteDataSource
+import com.jriveiro.listofmovies.domain.Movie
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.transform
 import javax.inject.Inject
 
 class MoviesRepository @Inject constructor(

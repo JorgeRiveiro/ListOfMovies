@@ -6,7 +6,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import com.jriveiro.listofmovies.data.Movie
+import com.jriveiro.listofmovies.domain.Movie
 import com.jriveiro.listofmovies.Result
 
 @OptIn(ExperimentalMaterial3Api::class)
