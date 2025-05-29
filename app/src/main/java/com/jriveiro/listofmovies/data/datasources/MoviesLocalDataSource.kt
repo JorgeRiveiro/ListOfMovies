@@ -7,16 +7,23 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class MoviesLocalDataSource @Inject constructor(
-    private val moviesDao: MoviesDao
-) {
+interface MoviesLocalDataSource {
+    val movies: Flow<List<Movie>>
+    fun findMovieById(id: Int): Flow<Movie?>
 
-    val movies: Flow<List<Movie>> =
+    suspend fun save(movies: List<Movie>)
+}
+
+class MoviesRoomDataSource @Inject constructor(
+    private val moviesDao: MoviesDao
+) : MoviesLocalDataSource {
+
+    override val movies: Flow<List<Movie>> =
         moviesDao.fetchPopularMovies().map { movies -> movies.map { it.toDomainMovie() } }
 
-    fun findMovieById(id: Int): Flow<Movie?> = moviesDao.findMovieById(id).map { it?.toDomainMovie() }
+    override fun findMovieById(id: Int): Flow<Movie?> = moviesDao.findMovieById(id).map { it?.toDomainMovie() }
 
-    suspend fun save(movies: List<Movie>) = moviesDao.save(movies.map { it.toDbMovie() })
+    override suspend fun save(movies: List<Movie>) = moviesDao.save(movies.map { it.toDbMovie() })
 }
 
 private fun DbMovie.toDomainMovie(): Movie = Movie(

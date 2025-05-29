@@ -2,18 +2,27 @@ package com.jriveiro.listofmovies.data.datasources
 
 import com.jriveiro.listofmovies.domain.Movie
 import com.jriveiro.listofmovies.data.datasources.remote.MoviesClient
+import com.jriveiro.listofmovies.data.datasources.remote.MoviesService
 import com.jriveiro.listofmovies.data.datasources.remote.RemoteMovie
 import javax.inject.Inject
 
-class MoviesRemoteDataSource @Inject constructor() {
+interface MoviesRemoteDataSource {
+    suspend fun fetchPopularMovies(region: String): List<Movie>
 
-    suspend fun fetchPopularMovies(region: String): List<Movie> =
-        MoviesClient.instance.fetchPopularMovies(region)
+    suspend fun findMovieById(id: Int): Movie
+}
+
+class MoviesServerDataSource @Inject constructor(
+    private val moviesService: MoviesService
+) : MoviesRemoteDataSource {
+
+    override suspend fun fetchPopularMovies(region: String): List<Movie> =
+        moviesService.fetchPopularMovies(region)
             .results
             .map { it.toDomainModel() }
 
-    suspend fun findMovieById(id: Int): Movie =
-        MoviesClient.instance.fetchMovieById(id).toDomainModel()
+    override suspend fun findMovieById(id: Int): Movie =
+        moviesService.fetchMovieById(id).toDomainModel()
 }
 
 private fun RemoteMovie.toDomainModel() = Movie(
