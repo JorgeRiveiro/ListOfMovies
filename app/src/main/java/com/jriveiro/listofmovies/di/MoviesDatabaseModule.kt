@@ -2,8 +2,8 @@ package com.jriveiro.listofmovies.di
 
 import android.content.Context
 import androidx.room.Room
-import com.jriveiro.listofmovies.data.datasources.database.MoviesDao
-import com.jriveiro.listofmovies.data.datasources.database.MoviesDatabase
+import com.jriveiro.listofmovies.framework.database.MoviesDao
+import com.jriveiro.listofmovies.framework.database.MoviesDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

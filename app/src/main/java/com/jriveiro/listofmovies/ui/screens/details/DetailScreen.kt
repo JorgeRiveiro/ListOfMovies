@@ -38,7 +38,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.jriveiro.listofmovies.R
-import com.jriveiro.listofmovies.domain.Movie
+import com.jriveiro.domain.Movie
 import com.jriveiro.listofmovies.ui.common.AcScaffold
 import com.jriveiro.listofmovies.ui.screens.Screen
 

@@ -26,7 +26,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.jriveiro.listofmovies.R
-import com.jriveiro.listofmovies.Result
+import com.jriveiro.listofmovies.ui.Result
 
 @Composable
 fun <T> AcScaffold(

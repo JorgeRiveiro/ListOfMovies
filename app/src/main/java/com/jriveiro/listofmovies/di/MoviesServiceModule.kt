@@ -1,7 +1,7 @@
 package com.jriveiro.listofmovies.di
 
-import com.jriveiro.listofmovies.data.datasources.remote.MoviesClient
-import com.jriveiro.listofmovies.data.datasources.remote.MoviesService
+import com.jriveiro.listofmovies.framework.remote.MoviesClient
+import com.jriveiro.listofmovies.framework.remote.MoviesService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
