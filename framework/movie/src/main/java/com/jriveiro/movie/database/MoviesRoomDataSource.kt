@@ -1,0 +1,48 @@
+package com.jriveiro.movie.database
+
+import com.jriveiro.data.datasource.MoviesLocalDataSource
+import com.jriveiro.domain.Movie
+import com.jriveiro.movie.database.DbMovie
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+import javax.inject.Inject
+
+class MoviesRoomDataSource @Inject constructor(
+    private val moviesDao: com.jriveiro.movie.database.MoviesDao
+) : MoviesLocalDataSource {
+
+    override val movies: Flow<List<Movie>> =
+        moviesDao.fetchPopularMovies().map { movies -> movies.map { it.toDomainMovie() } }
+
+    override fun findMovieById(id: Int): Flow<Movie?> = moviesDao.findMovieById(id).map { it?.toDomainMovie() }
+
+    override suspend fun save(movies: List<Movie>) = moviesDao.save(movies.map { it.toDbMovie() })
+}
+
+private fun com.jriveiro.movie.database.DbMovie.toDomainMovie(): Movie = Movie(
+    id = id,
+    title = title,
+    overview = overview,
+    poster = poster,
+    backdrop = backdrop,
+    releaseDate = releaseDate,
+    voteAverage = voteAverage,
+    isFavorite = isFavorite,
+    originalTitle = originalTitle,
+    originalLanguage = originalLanguage,
+    popularity = popularity
+)
+
+private fun Movie.toDbMovie(): com.jriveiro.movie.database.DbMovie = DbMovie(
+    id = id,
+    title = title,
+    overview = overview,
+    poster = poster,
+    backdrop = backdrop,
+    releaseDate = releaseDate,
+    voteAverage = voteAverage,
+    isFavorite = isFavorite,
+    originalTitle = originalTitle,
+    originalLanguage = originalLanguage,
+    popularity = popularity
+)

@@ -1,7 +1,7 @@
 package com.jriveiro.listofmovies.di
 
-import com.jriveiro.listofmovies.framework.remote.MoviesClient
-import com.jriveiro.listofmovies.framework.remote.MoviesService
+import com.jriveiro.core.MoviesClient
+import com.jriveiro.movie.network.MoviesService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,10 +14,10 @@ object MoviesServiceModule {
 
     @Provides
     @Singleton
-    fun provideMoviesClient(): MoviesClient = MoviesClient
+    fun provideMoviesClient(): com.jriveiro.core.MoviesClient = com.jriveiro.core.MoviesClient
 
     @Provides
     @Singleton
-    fun provideMoviesService(moviesClient: MoviesClient): MoviesService =
+    fun provideMoviesService(moviesClient: com.jriveiro.core.MoviesClient): com.jriveiro.movie.network.MoviesService =
         moviesClient.instance
 }
